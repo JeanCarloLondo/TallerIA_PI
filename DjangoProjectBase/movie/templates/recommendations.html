@@ -1,0 +1,50 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<div class="container">
+    <h2 class="mb-4">Movie Recommendations</h2>
+
+    <form method="GET" action="{% url 'recommendations' %}"> <!-- Asegúrate de que la URL esté definida correctamente en urls.py -->
+        <div class="mb-3">
+            <label for="prompt" class="form-label">Describe what kind of movie you're looking for:</label>
+            <input type="text" class="form-control" name="prompt" value="{{ prompt }}"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Recommendation</button>
+    </form>
+
+    {% if best_movie %}
+    <hr>
+    <h3 class="mt-4">Best match for: <em>"{{ prompt }}"</em></h3>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="{{ best_movie.image.url }}" class="card-img-top" alt="Movie Image">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ best_movie.title }}</h5>
+                    <p class="card-text">{{ best_movie.description }}</p>
+                    <p class="card-text"><strong>Genre:</strong> {{ best_movie.genre }}</p>
+                    <p class="card-text"><strong>Year:</strong> {{ best_movie.year }}</p>
+                    {% if best_movie.url %}
+                        <a href="{{ best_movie.url }}" class="btn btn-primary">Movie Link</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif prompt %}
+        <p class="mt-4 text-danger">No movie matches found for: <em>"{{ prompt }}"</em></p>
+    {% endif %}
+
+    <br/>
+    <br/>
+    <h2>Join our mailing list:</h2>
+    <form action="{% url 'signup' %}">
+        <div class="mb-3">
+            <label for="email" class="form-label">Enter your email:</label>
+            <input type="email" class="form-control" name="email" />
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+</div>
+
+{% endblock content %}
